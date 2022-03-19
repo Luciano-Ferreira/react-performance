@@ -1,4 +1,13 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
+import { AddProductToWishlistProp } from './AddProductToWishlist';
+// import AddProductToWishlist from './AddProductToWishlist';
+import dynamic from 'next/dynamic';
+
+const AddProductToWishlist = dynamic<AddProductToWishlistProp>(() => {
+   return import ('./AddProductToWishlist').then(mod => mod.AddProductToWishlist)
+}, {
+  loading: () => <span>Carregando...</span>
+})
 
 type ProductItemProps = {
   product: {
@@ -10,11 +19,19 @@ type ProductItemProps = {
   onAddToWishlist: (id: number) => void;
 }
 
-function ProductItemComponent ({ product, onAddToWishlist }:ProductItemProps) {
-  return(
+function ProductItemComponent({ product, onAddToWishlist }: ProductItemProps) {
+  const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
+
+
+  return (
     <div>
       {product.title} - <strong>{product.priceFormatted}</strong>
-      <button onClick={() => onAddToWishlist(product.id)} >Add to Wishlist</button>
+      <button onClick={() => setIsAddingToWishlist(true)}>Adicionar aos favoritos</button>
+      {
+        isAddingToWishlist &&
+        <AddProductToWishlist onAddToWishlist={() => onAddToWishlist(product.id)} onRequestClose={() => setIsAddingToWishlist(false)} />
+
+      }
     </div>
   );
 }
