@@ -1,5 +1,5 @@
 import ProductItem from './ProductItem';
-import { List, ListRowRenderer } from 'react-virtualized'
+import { List, ListRowRenderer } from 'react-virtualized';
 
 type SearchResultsProps = {
   results: Array<{
